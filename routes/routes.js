@@ -74,4 +74,9 @@ router.post('/updateTerms', setting.updateTerms);
 router.post('/setDeliveryLimit', setting.setDeliveryLimit);
 router.post('/setDeliveryCharge', setting.setDeliveryCharge);
 
+//Shop marker
+var shop = require("./shop/shop.controller");
+router.post('/addShop', shop.addShop);
+router.get('/getShop/:id', shop.getShop);
+
 module.exports = router;
