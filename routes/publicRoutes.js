@@ -36,6 +36,7 @@ router.get("/getDeliveryCharge", setting.getDeliveryCharge);
 // Manufacturer Module
 var manufacturer = require("./manufacturers/manufacturer.controller");
 router.get("/getManufacturers", manufacturer.getManufacturers);
+router.get("/getManufacturerById/:manufacturerId", manufacturer.getManufacturerById);
 router.post("/addManufacturer", manufacturer.addManufacturer);
 
 // User Module

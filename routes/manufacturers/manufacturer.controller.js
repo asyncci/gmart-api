@@ -51,7 +51,7 @@ var Manufacturer = require("./manufacturer.model");
 
 exports.addManufacturer = async function (req, res) {
   try {
-    const { name, keywords, description, photos } = req.body;
+    const { name, keywords, description, photos,brand } = req.body;
 
     if (!name) {
       return res.status(400).send({ success: false, error: "Invalid details" });
@@ -62,6 +62,7 @@ exports.addManufacturer = async function (req, res) {
       keywords,
       description,
       photos,
+      brand
     });
 
     const manufacturerObj = await manufacturerData.save();
@@ -189,4 +190,23 @@ exports.getManufacturers = async function (req, res) {
   return res
     .status(200)
     .send({ success: true, manufacturers, totalManufacturers });
+};
+
+exports.getManufacturerById = async function (req, res) {
+  try {
+    const manufacturerId = req.params.manufacturerId;
+    if (!manufacturerId) {
+      return res.status(400).send({ success: false, error: "Manufacturer ID is required" });
+    }
+
+    const manufacturer = await Manufacturer.findById(manufacturerId);
+
+    if (!manufacturer) {
+      return res.status(404).send({ success: false, error: "Manufacturer not found" });
+    }
+
+    return res.status(200).send({ success: true, data: manufacturer });
+  } catch (error) {
+    return res.status(500).send({ success: false, error: "Internal server error" });
+  }
 };
