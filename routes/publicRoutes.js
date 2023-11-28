@@ -36,8 +36,18 @@ router.get("/getDeliveryCharge", setting.getDeliveryCharge);
 // Manufacturer Module
 var manufacturer = require("./manufacturers/manufacturer.controller");
 router.get("/getManufacturers", manufacturer.getManufacturers);
-router.get("/getManufacturerById/:manufacturerId", manufacturer.getManufacturerById);
+router.get(
+  "/getManufacturerById/:manufacturerId",
+  manufacturer.getManufacturerById
+);
 router.post("/addManufacturer", manufacturer.addManufacturer);
+
+// Product Module
+var product = require("./product/product.controller");
+router.post("/addProduct", product.addProduct);
+router.put("/editProduct/:id", product.editProduct);
+router.delete("/deleteProduct/:id", product.deleteProduct);
+router.get("/getProducts", product.getProducts);
 
 // User Module
 var user = require("./users/users.controller");

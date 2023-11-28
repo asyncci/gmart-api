@@ -13,7 +13,6 @@ exports.addProduct = async function (req, res) {
     photos,
     manufacturerId,
   });
-
   try {
     const productObj = await productData.save();
     return res

@@ -46,11 +46,6 @@ router.put("/editAddress/:id", address.editAddress);
 router.delete("/deleteAddress/:id", address.deleteAddress);
 router.get("/getUserAddresses", address.getUserAddresses);
 
-// Product Module
-var product = require("./product/product.controller");
-router.post("/addProduct", product.addProduct);
-router.put("/editProduct/:id", product.editProduct);
-router.delete("/deleteProduct/:id", product.deleteProduct);
 
 // Category Module
 var category = require("./category/category.controller");
