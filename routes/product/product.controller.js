@@ -105,68 +105,68 @@ exports.deleteProduct = async function (req, res) {
   }
 };
 
-exports.getProducts = async function (req, res) {
-  var sort = { createdAt: -1 };
+// exports.getProducts = async function (req, res) {
+//   var sort = { createdAt: -1 };
 
-  if (req.query.sortBy === "HTL") sort = { specialPrice: -1 };
-  else if (req.query.sortBy === "LTH") sort = { specialPrice: 1 };
-  else if (req.query.sortBy === "popularity") sort = { popular: -1 };
-  else if (req.query.sortBy === "alphabetical") sort = { name: 1 };
+//   if (req.query.sortBy === "HTL") sort = { specialPrice: -1 };
+//   else if (req.query.sortBy === "LTH") sort = { specialPrice: 1 };
+//   else if (req.query.sortBy === "popularity") sort = { popular: -1 };
+//   else if (req.query.sortBy === "alphabetical") sort = { name: 1 };
 
-  var query = { $and: [] };
+//   var query = { $and: [] };
 
-  if (!req.query.all) query["$and"].push({ visible: true });
+//   if (!req.query.all) query["$and"].push({ visible: true });
 
-  if (req.query.categoryId)
-    query["$and"].push({ categories: req.query.categoryId });
+//   if (req.query.categoryId)
+//     query["$and"].push({ categories: req.query.categoryId });
 
-  if (req.query.type && req.query.type == "popular")
-    query["$and"].push({ popular: true });
+//   if (req.query.type && req.query.type == "popular")
+//     query["$and"].push({ popular: true });
 
-  if (req.query.location) {
-    const geoLocation = await getLocation(req.query.location);
-    if (geoLocation && geoLocation.lat && geoLocation.lng) {
-      query["$and"].push({
-        locationPoints: {
-          $near: {
-            $geometry: {
-              type: "Point",
-              coordinates: [geoLocation.lng, geoLocation.lat],
-            },
-            $maxDistance: 10000,
-          },
-        },
-      });
-    }
-  }
+//   if (req.query.location) {
+//     const geoLocation = await getLocation(req.query.location);
+//     if (geoLocation && geoLocation.lat && geoLocation.lng) {
+//       query["$and"].push({
+//         locationPoints: {
+//           $near: {
+//             $geometry: {
+//               type: "Point",
+//               coordinates: [geoLocation.lng, geoLocation.lat],
+//             },
+//             $maxDistance: 10000,
+//           },
+//         },
+//       });
+//     }
+//   }
 
-  if (req.query.search) {
-    const searchQuery = {
-      $or: [
-        {
-          name: new RegExp(
-            ".*" + req.query.search.trim().replace(/(\W)/g, "\\$1") + ".*",
-            "i"
-          ),
-        },
-      ],
-    };
-    query["$and"].push(searchQuery);
-  }
+//   if (req.query.search) {
+//     const searchQuery = {
+//       $or: [
+//         {
+//           name: new RegExp(
+//             ".*" + req.query.search.trim().replace(/(\W)/g, "\\$1") + ".*",
+//             "i"
+//           ),
+//         },
+//       ],
+//     };
+//     query["$and"].push(searchQuery);
+//   }
 
-  if (query["$and"].length <= 0) delete query["$and"];
+//   if (query["$and"].length <= 0) delete query["$and"];
 
-  console.log(query["$and"], "query['$and']");
+//   console.log(query["$and"], "query['$and']");
 
-  const totalProduct = await Product.find(query).count();
-  const products = await Product.find(query)
-    .populate("categories", "_id name")
-    .skip(req.query.skip)
-    .limit(req.query.limit)
-    .sort(sort);
+//   const totalProduct = await Product.find(query).count();
+//   const products = await Product.find(query)
+//     .populate("categories", "_id name")
+//     .skip(req.query.skip)
+//     .limit(req.query.limit)
+//     .sort(sort);
 
-  return res.status(200).send({ success: true, products, totalProduct });
-};
+//   return res.status(200).send({ success: true, products, totalProduct });
+// };
 
 exports.getProductDetails = async function (req, res) {
   if (req?.params?.productId) {
@@ -185,4 +185,26 @@ exports.getProductDetails = async function (req, res) {
       .status(400)
       .send({ success: false, message: "productId required" });
   }
+};
+
+
+
+exports.getProducts = async function (req, res) {
+  var query = {};
+
+  if (req.query.search)
+    query["name"] = new RegExp(
+      ".*" + req.query.search.trim().replace(/(\W)/g, "\\$1") + ".*",
+      "i"
+    );
+
+  const totalProducts = await Product.find(query).countDocuments();
+  const products = await Product.find(query)
+    .skip(parseInt(req.query.skip))
+    .limit(parseInt(req.query.limit))
+    .sort({ createdAt: -1 });
+
+  return res
+    .status(200)
+    .send({ success: true, products, totalProducts });
 };
