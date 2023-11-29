@@ -6,14 +6,14 @@ const Manufacturer = require("../manufacturers/manufacturer.model"); // Import t
 var { getLocation } = require("../../lib/core");
 
 exports.addProduct = async function (req, res) {
-  const { name, price, description, photos, manufacturerId } = req.body;
+  const { name, price, description, photos, productId } = req.body;
 
   const productData = new Product({
     name,
     price,
     description,
     photos,
-    manufacturerId,
+    productId,
   });
   try {
     const productObj = await productData.save();
@@ -50,7 +50,7 @@ exports.editProduct = async function (req, res) {
       return res.status(400).send({ success: false, error: "invalid product" });
     }
 
-    const { name, price, description, photos, manufacturerId } = req.body;
+    const { name, price, description, photos, productId } = req.body;
 
     const productData = {};
 
@@ -58,7 +58,7 @@ exports.editProduct = async function (req, res) {
     if (price) productData["price"] = price;
     if (description) productData["description"] = description;
     if (photos) productData["photos"] = photos;
-    if (visible) productData["manufacturerId"] = manufacturerId;
+    if (visible) productData["productId"] = productId;
     await Product.updateOne({ _id: productId }, { $set: productData });
 
     return res.status(200).send({ success: true, message: "product updated" });
@@ -171,21 +171,27 @@ exports.deleteProduct = async function (req, res) {
 // };
 
 exports.getProductDetails = async function (req, res) {
-  if (req?.params?.productId) {
-    const product = await Product.findOne({
-      _id: req?.params?.productId,
-    }).populate("categories", "_id name");
-    if (product && product._id) {
-      return res.status(200).send({ success: true, product });
-    } else {
+  try {
+    const productId = req.params.productId;
+    if (!productId) {
       return res
         .status(400)
-        .send({ success: false, message: "product not found" });
+        .send({ success: false, error: "Manufacturer ID is required" });
     }
-  } else {
+
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res
+        .status(404)
+        .send({ success: false, error: "Manufacturer not found" });
+    }
+
+    return res.status(200).send({ success: true, data: product });
+  } catch (error) {
     return res
-      .status(400)
-      .send({ success: false, message: "productId required" });
+      .status(500)
+      .send({ success: false, error: "Internal server error" });
   }
 };
 exports.getProducts = async function (req, res) {
@@ -208,7 +214,7 @@ exports.getProducts = async function (req, res) {
     const populatedProducts = await Promise.all(
       products.map(async (product) => {
         const manufacturer = await Manufacturer.findById(
-          product.manufacturerId
+          product.productId
         );
         return {
           ...product.toObject(),
