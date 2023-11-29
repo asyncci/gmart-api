@@ -8,7 +8,10 @@ var ProductSchema = new Schema(
     description: String,
     price: Number,
     photos: [String],
-    manufacturerId: String,
+    manufacturerId: {
+      type: Schema.Types.ObjectId,
+      ref: "Manufacturer", 
+    },
   },
   {
     timestamps: true,

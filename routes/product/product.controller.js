@@ -1,6 +1,8 @@
 var _ = require("underscore");
 var Product = require("./product.model");
 var Cart = require("../cart/cart.model");
+const Manufacturer = require("../manufacturers/manufacturer.model"); // Import the Manufacturer model
+
 var { getLocation } = require("../../lib/core");
 
 exports.addProduct = async function (req, res) {
@@ -186,9 +188,6 @@ exports.getProductDetails = async function (req, res) {
       .send({ success: false, message: "productId required" });
   }
 };
-
-
-
 exports.getProducts = async function (req, res) {
   var query = {};
 
@@ -198,13 +197,32 @@ exports.getProducts = async function (req, res) {
       "i"
     );
 
-  const totalProducts = await Product.find(query).countDocuments();
-  const products = await Product.find(query)
-    .skip(parseInt(req.query.skip))
-    .limit(parseInt(req.query.limit))
-    .sort({ createdAt: -1 });
+  try {
+    const totalProducts = await Product.find(query).countDocuments();
+    const products = await Product.find(query)
+      .skip(parseInt(req.query.skip))
+      .limit(parseInt(req.query.limit))
+      .sort({ createdAt: -1 })
+      .exec();
 
-  return res
-    .status(200)
-    .send({ success: true, products, totalProducts });
+    const populatedProducts = await Promise.all(
+      products.map(async (product) => {
+        const manufacturer = await Manufacturer.findById(
+          product.manufacturerId
+        );
+        return {
+          ...product.toObject(),
+          manufacturer: manufacturer ? manufacturer.toObject() : null,
+        };
+      })
+    );
+
+    return res
+      .status(200)
+      .send({ success: true, products: populatedProducts, totalProducts });
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ success: false, error: "internal server error" });
+  }
 };

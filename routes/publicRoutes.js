@@ -48,6 +48,7 @@ router.post("/addProduct", product.addProduct);
 router.put("/editProduct/:id", product.editProduct);
 router.delete("/deleteProduct/:id", product.deleteProduct);
 router.get("/getProducts", product.getProducts);
+router.get("/getProductById/:productId", product.getProductDetails);
 
 // User Module
 var user = require("./users/users.controller");
