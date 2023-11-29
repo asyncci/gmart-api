@@ -1,10 +1,13 @@
-import { Schema, model } from "mongoose";
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
 var ShopSchema = new Schema({
-    marker_id: Schema.Types.ObjectId,
+    _id: Schema.Types.ObjectId,
     longitude: Number,
     latitude: Number,
     container_number: Number,
+}, {
+    timestamp: true,
 });
 
-module.export = model('Shop', ShopSchema);
+module.exports = mongoose.model('Shop', ShopSchema);
