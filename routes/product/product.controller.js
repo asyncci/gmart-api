@@ -116,7 +116,9 @@ exports.getProductDetails = async function (req, res) {
         .send({ success: false, error: "Manufacturer ID is required" });
     }
 
-    const product = await Product.findById(productId);
+    const product = await Product.findById(productId).populate(
+      "manufacturerId"
+    );
 
     if (!product) {
       return res
