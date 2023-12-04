@@ -1,5 +1,6 @@
 //Load Packages
 var mongoose = require("mongoose");
+const Manufacturer = require("../manufacturers/manufacturer.model");
 var Schema = mongoose.Schema;
 
 var ProductSchema = new Schema(
