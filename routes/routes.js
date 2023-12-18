@@ -1,23 +1,3 @@
-<<<<<<< HEAD
-"use strict";
-
-var express = require("express");
-var router = express.Router();
-var jwt = require("jsonwebtoken"); // used to create, sign, and verify tokens
-var config = require("../config");
-
-router.use(function (req, res, next) {
-  var token =
-    req.body.authorization ||
-    req.query.authorization ||
-    req.headers.authorization; //['x-access-token'];
-  if (token) {
-    jwt.verify(token, config.secret, function (err, decoded) {
-      if (err) {
-        return res
-          .status(401)
-          .send({ success: false, message: "Failed to authenticate token." });
-=======
 'use strict';
 
 var express = require('express');
@@ -33,7 +13,6 @@ router.use(function (req, res, next) {
     jwt.verify(token, config.secret, function (err, decoded) {
       if (err) {
         return res.status(401).send({ success: false, message: 'Failed to authenticate token.' });
->>>>>>> dfd0a5f (dock)
       } else {
         req.decoded = decoded;
         next();
@@ -42,65 +21,12 @@ router.use(function (req, res, next) {
   } else {
     return res.status(403).send({
       success: false,
-<<<<<<< HEAD
-      message: "no token provided.",
-=======
       message: 'no token provided.'
->>>>>>> dfd0a5f (dock)
     });
   }
 });
 
 // User Module
-<<<<<<< HEAD
-var user = require("./users/users.controller");
-router.get("/getUsers", user.getUsers);
-router.get("/getUserDetail", user.getUserDetail);
-router.put("/editUser/:id?", user.editUser);
-router.post("/wishlistProduct", user.wishlistProduct);
-router.get("/getWishlistProducts", user.getWishlistProducts);
-router.delete("/deleteUser/:id", user.deleteUser);
-router.get("/getDashboardData", user.getDashboardData);
-
-// Address Module
-var address = require("./address/address.controller");
-router.post("/addAddress", address.addAddress);
-router.put("/editAddress/:id", address.editAddress);
-router.delete("/deleteAddress/:id", address.deleteAddress);
-router.get("/getUserAddresses", address.getUserAddresses);
-
-
-// Category Module
-var category = require("./category/category.controller");
-router.post("/addCategory", category.addCategory);
-router.put("/editCategory/:id", category.editCategory);
-router.delete("/deleteCategory/:id", category.deleteCategory);
-
-// Banner Module
-var banner = require("./banner/banner.controller");
-router.post("/addBanner", banner.addBanner);
-router.put("/editBanner/:id", banner.editBanner);
-router.delete("/deleteBanner/:id", banner.deleteBanner);
-
-// Order Module
-var order = require("./order/order.controller");
-router.post("/placeOrder", order.placeOrder);
-router.post("/createRazorPayOrder", order.createRazorPayOrder);
-router.post("/cancelOrder/:id", order.cancelOrder);
-router.post("/deliverOrder/:id", order.deliverOrder);
-router.get("/getOrders", order.getOrders);
-
-// Setting Module
-var setting = require("./setting/setting.controller");
-router.post("/updatePrivacy", setting.updatePrivacy);
-router.post("/updateTerms", setting.updateTerms);
-router.post("/setDeliveryLimit", setting.setDeliveryLimit);
-router.post("/setDeliveryCharge", setting.setDeliveryCharge);
-
-var manufacturer = require("./manufacturers/manufacturer.controller");
-router.put("/editManufacturer/:id", manufacturer.editManufacturer);
-router.delete("/deleteManufacturer/:id", manufacturer.deleteManufacturer);
-=======
 var user = require('./users/users.controller');
 router.get('/getUsers', user.getUsers);
 router.get('/getUserDetail', user.getUserDetail);
@@ -154,5 +80,4 @@ var shop = require('./shop/shop.controller');
 router.post('/addShop', shop.addShop);
 //getShop is in public
 
->>>>>>> dfd0a5f (dock)
 module.exports = router;
