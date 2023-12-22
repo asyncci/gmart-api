@@ -3,7 +3,7 @@ var Product = require('./product.model');
 var Cart = require('../cart/cart.model');
 var { getLocation } = require('../../lib/core');
 
-exports.addProduct = async function (req, res) {
+exports.addProduct = async function (req, res){
     const user = req?.decoded && req?.decoded?.user ? req?.decoded?.user : null
     if (user._id) {
         if (req.body.name && !_.isUndefined(req.body.price) && req.body.quantity) {
@@ -78,7 +78,7 @@ exports.editProduct = async function (req, res) {
     }
 }
 
-exports.deleteProduct = async function (req, res) {
+exports.deleteProduct = async function (req, res){
     const user = req?.decoded && req?.decoded?.user ? req?.decoded?.user : null
     if (user._id) {
         if(req?.params?.id) {
@@ -148,7 +148,7 @@ exports.getProducts = async function (req, res) {
     return res.status(200).send({ success: true, products, totalProduct })
 }
 
-exports.getProductDetails = async function (req, res) {
+exports.getProductDetails = async function (req, res){
     if(req?.params?.productId) {
         const product = await Product.findOne({ _id: req?.params?.productId }).populate('categories', '_id name')
         if(product && product._id) {

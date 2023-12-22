@@ -1,6 +1,6 @@
 var Keywords = require('./keyword.model');
 
-exports.getKeywords = async function(req, res) {
+exports.getKeywords = async function (req, res) {
     const keywords = [
         'Women',
         'Men',

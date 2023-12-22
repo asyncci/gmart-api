@@ -42,7 +42,7 @@ exports.addManufacturer = async function (req, res) {
 }
 
 //   withouot token above
-exports.editManufacturer = async function (req, res) {
+exports.editManufacturer = async function (req, res){
   const user = req?.decoded && req?.decoded?.user ? req?.decoded?.user : null;
   if (user?._id) {
     if (user.role && user.role === "admin") {
@@ -93,7 +93,7 @@ exports.editManufacturer = async function (req, res) {
   }
 };
 
-exports.deleteManufacturer = async function  (req, res) {
+exports.deleteManufacturer = async function (req, res) {
   const user = req?.decoded && req?.decoded?.user ? req?.decoded?.user : null;
   if (user?._id) {
     if (user.role && user.role === "admin") {
@@ -154,7 +154,7 @@ exports.getManufacturers = async function (req, res) {
     .send({ success: true, manufacturers, totalManufacturers });
 };
 
-exports.getManufacturerById = async function (req, res) {
+exports.getManufacturerById = async function (req, res){
   try {
     const manufacturerId = req.params.manufacturerId;
     if (!manufacturerId) {
