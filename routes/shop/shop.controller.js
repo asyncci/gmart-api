@@ -1,7 +1,7 @@
 var Shop = require('./shop.model');
 
 //without photos
-export async function addShop(req, res) {
+exports.addShop = async function (req, res) {
     const user = req?.decoded && req?.decoded?.user ? req?.decoded?.user : null;
 
     if (user._id) {
@@ -12,6 +12,7 @@ export async function addShop(req, res) {
         if (req.body.container) shop.container = req.body.container; else okay = false;
         if (req.body.latitude) shop.latitude = req.body.latitude; else okay = false;
         if (req.body.longitude) shop.longitude = req.body.longitude; else okay = false;
+        if (req.body.description) shop.description = req.body.description; else okay = false;
         if (req.body.keywords) {
             if (req.body.keywords.length < 1)
                 okay = false;
@@ -41,12 +42,12 @@ export async function addShop(req, res) {
     return res.status(401).send({ success: false, message: "Shop was not added" })
 }
 
-export async function getShops(req, res) {
+exports.getShops = async function (req, res) {
     const shops = await Shop.find({});
     return res.status(200).send({ success: true, shops })
 }
 
-export async function getShop(req, res) {
+exports.getShop = async function (req, res) {
     if (req?.params?.id) {
         const shop = Shop.findOne({ _id: req?.params?.id })
         if (!shop) return res.status(400).send({ success: false, message: 'invalid shop' });

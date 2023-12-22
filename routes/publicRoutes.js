@@ -34,7 +34,27 @@ router.get('/getTerms', setting.getTerms);
 router.get('/getDeliveryLimit', setting.getDeliveryLimit);
 router.get('/getDeliveryCharge', setting.getDeliveryCharge);
 
+var manufacturerController = require('./manufacturers/manufacturer.controller');
 
+// Add the routes for manufacturer module
+router.get('/getManufacturers', manufacturerController.getManufacturers);
+router.get('/getManufacturer/:manufacturerId', manufacturerController.getManufacturerById);
+router.put('/editManufacturer/:id', manufacturerController.editManufacturer);
+router.delete('/deleteManufacturer/:id', manufacturerController.deleteManufacturer);
+
+// ... existing routes and module.exports
+// ... existing imports and routes
+
+var productController = require('./product/product.controller');
+
+// Add the routes for product module
+router.get('/getProducts', productController.getProducts);
+router.get('/getProductDetails/:productId', productController.getProductDetails);
+router.post('/addProduct', productController.addProduct);
+router.put('/editProduct/:id', productController.editProduct);
+router.delete('/deleteProduct/:id', productController.deleteProduct);
+
+// ... existing routes and module.exports
 
 var shop = require('./shop/shop.controller');
 router.get('/getShops', shop.getShops);

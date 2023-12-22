@@ -80,4 +80,8 @@ var shop = require('./shop/shop.controller');
 router.post('/addShop', shop.addShop);
 //getShop is in public
 
+var manufacturerController = require('./manufacturers/manufacturer.controller');
+router.post('/addManufacturer', manufacturerController.addManufacturer);
+
+
 module.exports = router;

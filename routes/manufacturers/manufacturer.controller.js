@@ -1,97 +1,45 @@
 var _ = require("underscore");
 var Manufacturer = require("./manufacturer.model");
 
-// exports.addManufacturer = async function (req, res) {
-//   const user = req?.decoded && req?.decoded?.user ? req?.decoded?.user : null;
-//   if (user._id) {
-//     if (user.role && user.role === "admin") {
-//       if (req.body.name) {
-//         var manufacturerData = new Manufacturer();
-//         manufacturerData.name = req.body.name;
-
-//         if (!_.isUndefined(req.body.keywords))
-//           manufacturerData.keywords = req.body.keywords;
-//         if (!_.isUndefined(req.body.description))
-//           manufacturerData.description = req.body.description;
-
-//         await manufacturerData
-//           .save()
-//           .then(async (manufacturerObj) => {
-//             return res
-//               .status(200)
-//               .send({
-//                 success: true,
-//                 message: "Manufacturer added",
-//                 data: manufacturerObj,
-//               });
-//           })
-//           .catch((err) => {
-//             return res
-//               .status(500)
-//               .send({ success: false, error: "Internal server error" });
-//           });
-//       } else {
-//         return res
-//           .status(400)
-//           .send({ success: false, error: "Invalid details" });
-//       }
-//     } else {
-//       return res
-//         .status(400)
-//         .send({ success: false, error: "Only admin can add Manufacturer" });
-//     }
-//   } else {
-//     return res
-//       .status(401)
-//       .send({ success: false, error: "Authentication failed" });
-//   }
-// };
-
-// without token
-
 exports.addManufacturer = async function (req, res) {
-  try {
-    const {
-      name,
-      keywords,
-      description,
-      photos,
-      brand,
-      contactInfo,
-      lat,
-      lng,
-      website,
-    } = req.body;
+  const user = req?.decoded && req?.decoded?.user ? req?.decoded?.user : null;
 
-    if (!name) {
-      return res.status(400).send({ success: false, error: "Invalid details" });
-    }
+  if (user._id) {
+      let okay = true;
+      let shop = new Manufacturer();
+      if (req.body.name) shop.name = req.body.name; else okay = false;
+      if (req.body.location) shop.location = req.body.location; else okay = false;
+      if (req.body.latitude) shop.latitude = req.body.latitude; else okay = false;
+      if (req.body.longitude) shop.longitude = req.body.longitude; else okay = false;
+      if (req.body.description) shop.description = req.body.description; else okay = false;
+      if (req.body.keywords) {
+          if (req.body.keywords.length < 1)
+              okay = false;
+          shop.keywords = req.body.keywords;
+      }
+      else okay = false;
+      if (req.body.photos) {
+          if (req.body.photos.length < 1)
+              okay = false;
+          shop.photos = req.body.photos;
+      }
+      else okay = false;
+      if (req.body.our) shop.our = req.body.our; else okay = false;
 
-    const manufacturerData = new Manufacturer({
-      name,
-      keywords,
-      description,
-      photos,
-      brand,
-      contactInfo,
-      lat,
-      lng,
-      website,
-    });
+      if (!okay) return res.status(401).send({ success: false, message: 'shop was not added' });
 
-    const manufacturerObj = await manufacturerData.save();
 
-    return res.status(200).send({
-      success: true,
-      message: "Manufacturer added",
-      data: manufacturerObj,
-    });
-  } catch (error) {
-    return res
-      .status(500)
-      .send({ success: false, error: "Internal server error" });
+      await shop.save()
+          .then(async (shopObj) => {
+              return res.status(200).send({ success: true, message: 'shop added', data: shopObj });
+          })
+          .catch(async (err) => {
+              return res.status(401).send({ success: false, message: 'shop was not added' });
+          });
   }
-};
+
+  return res.status(401).send({ success: false, message: "Shop was not added" })
+}
 
 //   withouot token above
 exports.editManufacturer = async function (req, res) {
@@ -145,7 +93,7 @@ exports.editManufacturer = async function (req, res) {
   }
 };
 
-exports.deleteManufacturer = async function (req, res) {
+exports.deleteManufacturer = async function  (req, res) {
   const user = req?.decoded && req?.decoded?.user ? req?.decoded?.user : null;
   if (user?._id) {
     if (user.role && user.role === "admin") {
@@ -166,7 +114,7 @@ exports.deleteManufacturer = async function (req, res) {
           })
           .catch((err) => {
             return res
-              .status(500)
+            .status(500)
               .send({ success: false, error: "Internal server error" });
           });
       } else {

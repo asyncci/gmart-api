@@ -1,9 +1,23 @@
 var Keywords = require('./keyword.model');
 
-export async function getKeywords(req, res) {
+exports.getKeywords = async function(req, res) {
     const keywords = [
         'Свитшот',
-        'Куртки'
+        'Куртки',
+        'Кофты',
+        'Свитеры',
+        'Штаны',
+        'Шорты',
+        'Шланги',
+        'Насосы',
+        'Свитшот',
+        'Куртки',
+        'Кофты',
+        'Свитеры',
+        'Штаны',
+        'Шорты',
+        'Шланги',
+        'Насосы',
     ];
     return res.status(200).send({ success: true, keywords: keywords })
 }

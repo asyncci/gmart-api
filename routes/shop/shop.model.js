@@ -5,6 +5,7 @@ var ShopSchema = new Schema({
     container: String,
     longitude: Number,
     latitude: Number,
+    description: String,
     //no photos for now
     photos: [],
     keywords: [],
