@@ -38,7 +38,6 @@ exports.addManufacturer = async function (req, res) {
           });
   }
 
-  return res.status(401).send({ success: false, message: "Shop was not added" })
 }
 
 //   withouot token above

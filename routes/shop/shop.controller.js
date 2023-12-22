@@ -39,7 +39,6 @@ exports.addShop = async function (req, res) {
             });
     }
 
-    return res.status(401).send({ success: false, message: "Shop was not added" })
 }
 
 exports.getShops = async function (req, res) {
