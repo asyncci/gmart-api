@@ -1,7 +1,7 @@
 //Load Packages
 var mongoose = require("mongoose");
 
-var ProductSchema = new Schema(
+var ProductSchema = new mongoose.Schema(
   {
     name: String,
     photos: [String],
