@@ -206,22 +206,28 @@ exports.deleteProduct = async function (req, res) {
 //   return res.status(200).send({ success: true, products, totalProduct });
 // };
 
-exports.getProductDetails = async function (req, res) {
-  if (req?.params?.productId) {
-    const product = await Product.findOne({
-      _id: req?.params?.productId,
-    }).populate("categories", "_id name");
-    if (product && product._id) {
-      return res.status(200).send({ success: true, product });
-    } else {
+exports.getProductDetails = async function (req, res){
+  try {
+    const ProductId = req.params.ProductId;
+    if (!ProductId) {
       return res
         .status(400)
-        .send({ success: false, message: "product not found" });
+        .send({ success: false, error: "Product ID is required" });
     }
-  } else {
+
+    const product = await Product.findById(ProductId);
+
+    if (!Product) {
+      return res
+        .status(404)
+        .send({ success: false, error: "Product not found" });
+    }
+
+    return res.status(200).send({ success: true, data: Product });
+  } catch (error) {
     return res
-      .status(400)
-      .send({ success: false, message: "productId required" });
+      .status(500)
+      .send({ success: false, error: "Internal server error" });
   }
 };
 
