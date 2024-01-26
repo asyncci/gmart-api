@@ -4,34 +4,45 @@ var Cart = require("../cart/cart.model");
 var { getLocation } = require("../../lib/core");
 
 exports.addProduct = async function (req, res) {
-  try {
-    const { name, location, description, photos } = req.body;
+  let okay = true;
+  let product = new Product();
 
-    if (!name || !location || !description || !photos || photos.length < 1) {
-      return res.status(400).send({
+  if (req.body.name) product.name = req.body.name;
+  else okay = false;
+  if (req.body.description) product.description = req.body.description;
+  else okay = false;
+  if (req.body.location) product.location = req.body.location;
+  else okay = false;
+
+  if (req.body.photos) {
+    if (req.body.photos.length < 1) okay = false;
+    product.photos = req.body.photos;
+  } else okay = false;
+
+  if (!okay) {
+    return res
+      .status(400)
+      .send({
         success: false,
         message: "Invalid request. Check required fields.",
       });
-    }
-
-    const product = new Product({
-      name,
-      location,
-      description,
-      photos,
-    });
-    const productObj = await product.save();
-
-    return res
-      .status(200)
-      .send({ success: true, message: "product added", data: productObj });
-  } catch (err) {
-    console.error("Error adding product:", err);
-    return res
-      .status(500)
-      .send({ success: false, message: "Internal server error" });
   }
+
+  await product
+    .save()
+    .then(async (productObj) => {
+      return res
+        .status(200)
+        .send({ success: true, message: "Product added", data: productObj });
+    })
+    .catch(async (err) => {
+      console.error("Error adding product:", err);
+      return res
+        .status(500)
+        .send({ success: false, message: "Internal server error" });
+    });
 };
+
 exports.editProduct = async function (req, res) {
   const user = req?.decoded && req?.decoded?.user ? req?.decoded?.user : null;
   if (user._id) {
