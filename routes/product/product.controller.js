@@ -215,7 +215,7 @@ exports.getProductDetails = async function (req, res){
         .send({ success: false, error: "Product ID is required" });
     }
 
-    const product = await Product.findById(ProductId);
+    const product = await Product.findById(productId);
 
     if (!product) {
       return res
