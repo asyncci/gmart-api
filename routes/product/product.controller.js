@@ -208,8 +208,8 @@ exports.deleteProduct = async function (req, res) {
 
 exports.getProductDetails = async function (req, res){
   try {
-    const ProductId = req.params.ProductId;
-    if (!ProductId) {
+    const productId = req.params.productId;
+    if (!productId) {
       return res
         .status(400)
         .send({ success: false, error: "Product ID is required" });
@@ -217,13 +217,13 @@ exports.getProductDetails = async function (req, res){
 
     const product = await Product.findById(ProductId);
 
-    if (!Product) {
+    if (!product) {
       return res
         .status(404)
         .send({ success: false, error: "Product not found" });
     }
 
-    return res.status(200).send({ success: true, data: Product });
+    return res.status(200).send({ success: true, data: product });
   } catch (error) {
     return res
       .status(500)
