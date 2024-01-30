@@ -24,11 +24,11 @@ app.use(function (req, res, next) {
 });
 
 //==================================--DB--====================================
-let mongoUrl = 'mongodb+srv://'
-if (config.dbusername) mongoUrl += (config.dbusername + ':')
-if (config.dbpassword) mongoUrl += (encodeURIComponent(config.dbpassword) + '@')
-if (config.dburl) mongoUrl += (config.dburl)
-if (config.dbname) mongoUrl += ('/' + config.dbname)
+let mongoUrl = 'mongodb+srv://nazarovkanat7:kanat25@sewing-cluster.pigevml.mongodb.net/?retryWrites=true&w=majority'
+// if (config.dbusername) mongoUrl += (config.dbusername + ':')
+// if (config.dbpassword) mongoUrl += (encodeURIComponent(config.dbpassword) + '@')
+// if (config.dburl) mongoUrl += (config.dburl)
+// if (config.dbname) mongoUrl += ('/' + config.dbname)
 mongoose.connect(mongoUrl, { useNewUrlParser: true });
 
 var db = mongoose.connection;
