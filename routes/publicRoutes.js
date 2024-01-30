@@ -78,5 +78,6 @@ router.get("/getRequests", requestController.getRequests);
 router.post("/addRequest", requestController.createRequest);
 router.put("/updateRequest/:id", requestController.updateRequest);
 router.put("/deleteRequest/:id", requestController.deleteRequest);
+router.put("/getRequestById/:requestId", requestController.getRequestById);
 
 module.exports = router;
