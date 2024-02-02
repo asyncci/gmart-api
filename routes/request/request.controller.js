@@ -71,8 +71,8 @@ exports.getRequests = async function (req, res) {
 // READ a single Request by ID
 exports.getRequestById = async function (req, res) {
   try {
-    const requestId = req.params.id;
-    const request = await Request.findById(requestId);
+    const id = req.params.id;
+    const request = await Request.findById(id);
 
     if (!request) {
       return res
