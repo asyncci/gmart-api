@@ -4,6 +4,7 @@ const ManufacturerSchema = new mongoose.Schema({
   name: String,
   keywords: [],
   description: String,
+  comment: String,
   location: String,
   latitude: Number,
   longitude: Number,

@@ -12,6 +12,7 @@ exports.addManufacturer = async function (req, res) {
       if (req.body.latitude) shop.latitude = req.body.latitude; else okay = false;
       if (req.body.longitude) shop.longitude = req.body.longitude; else okay = false;
       if (req.body.description) shop.description = req.body.description; else okay = false;
+      if (req.body.comment) shop.comment = req.body.comment; else okay = false;
       if (req.body.keywords) {
           if (req.body.keywords.length < 1)
               okay = false;
