@@ -6,7 +6,6 @@ var ProductSchema = new mongoose.Schema(
     name: String,
     photos: [],
     description: String,
-    location: String,
   },
   {
     timestamps: true,

@@ -11,8 +11,6 @@ exports.addProduct = async function (req, res) {
   else okay = false;
   if (req.body.description) product.description = req.body.description;
   else okay = false;
-  if (req.body.location) product.location = req.body.location;
-  else okay = false;
 
   if (req.body.photos) {
     if (req.body.photos.length < 1) okay = false;
@@ -142,69 +140,6 @@ exports.deleteProduct = async function (req, res) {
       .send({ success: false, error: "authentication failed" });
   }
 };
-
-// exports.getProducts = async function (req, res) {
-//   var sort = { createdAt: -1 };
-
-//   if (req.query.sortBy === "HTL") sort = { specialPrice: -1 };
-//   else if (req.query.sortBy === "LTH") sort = { specialPrice: 1 };
-//   else if (req.query.sortBy === "popularity") sort = { popular: -1 };
-//   else if (req.query.sortBy === "alphabetical") sort = { name: 1 };
-
-//   var query = { $and: [] };
-
-//   if (!req.query.all) query["$and"].push({ visible: true });
-
-//   if (req.query.categoryId)
-//     query["$and"].push({ categories: req.query.categoryId });
-
-//   if (req.query.type && req.query.type == "popular")
-//     query["$and"].push({ popular: true });
-
-//   if (req.query.location) {
-//     const geoLocation = await getLocation(req.query.location);
-//     if (geoLocation && geoLocation.lat && geoLocation.lng) {
-//       query["$and"].push({
-//         locationPoints: {
-//           $near: {
-//             $geometry: {
-//               type: "Point",
-//               coordinates: [geoLocation.lng, geoLocation.lat],
-//             },
-//             $maxDistance: 10000,
-//           },
-//         },
-//       });
-//     }
-//   }
-
-//   if (req.query.search) {
-//     const searchQuery = {
-//       $or: [
-//         {
-//           name: new RegExp(
-//             ".*" + req.query.search.trim().replace(/(\W)/g, "\\$1") + ".*",
-//             "i"
-//           ),
-//         },
-//       ],
-//     };
-//     query["$and"].push(searchQuery);
-//   }
-
-//   if (query["$and"].length <= 0) delete query["$and"];
-
-//   console.log(query["$and"], "query['$and']");
-
-//   const totalProduct = await Product.find(query).count();
-//   const products = await Product.find(query)
-//     .populate("categories", "_id name")
-//     .skip(req.query.skip)
-//     .limit(req.query.limit)
-//     .sort(sort);
-
-//   return res.status(200).send({ success: true, products, totalProduct });
-// };
 
 exports.getProductDetails = async function (req, res){
   try {

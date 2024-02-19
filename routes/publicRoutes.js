@@ -80,4 +80,10 @@ router.put("/updateRequest/:id", requestController.updateRequest);
 router.put("/deleteRequest/:id", requestController.deleteRequest);
 router.get("/getRequestById/:id", requestController.getRequestById);
 
+// TEXTILE ROUTES
+var textileController = require("./textile/textile.controller");
+router.get("/getTextile", textileController.getTextiles);
+router.post("/addTextile", textileController.addTextile);
+router.get("/getTextileById/:id", textileController.getTextileDetails);
+
 module.exports = router;
