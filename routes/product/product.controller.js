@@ -17,13 +17,22 @@ exports.addProduct = async function (req, res) {
     product.photos = req.body.photos;
   } else okay = false;
 
+  if (req.body.manufacturerIds) {
+    const allValidIds = req.body.manufacturerIds.every((id) =>
+      mongoose.Types.ObjectId.isValid(id)
+    );
+    if (allValidIds) {
+      product.manufacturerIds = req.body.manufacturerIds;
+    } else {
+      okay = false; // If any ID is not valid, set okay to false
+    }
+  } else okay = false;
+// 
   if (!okay) {
-    return res
-      .status(400)
-      .send({
-        success: false,
-        message: "Invalid request. Check required fields.",
-      });
+    return res.status(400).send({
+      success: false,
+      message: "Invalid request. Check required fields.",
+    });
   }
 
   await product
@@ -141,7 +150,7 @@ exports.deleteProduct = async function (req, res) {
   }
 };
 
-exports.getProductDetails = async function (req, res){
+exports.getProductDetails = async function (req, res) {
   try {
     const productId = req.params.productId;
     if (!productId) {
@@ -166,7 +175,6 @@ exports.getProductDetails = async function (req, res){
   }
 };
 
-
 exports.getProducts = async function (req, res) {
   var query = {};
 
@@ -182,7 +190,5 @@ exports.getProducts = async function (req, res) {
     .limit(parseInt(req.query.limit))
     .sort({ createdAt: -1 });
 
-  return res
-    .status(200)
-    .send({ success: true, Products, totalProducts });
+  return res.status(200).send({ success: true, Products, totalProducts });
 };
